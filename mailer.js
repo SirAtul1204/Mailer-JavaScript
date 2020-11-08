@@ -43,7 +43,8 @@ app.post("/withQRcode", async (req, res) => {
         to: req.body.email,
         subject: "Welcome!",
         text: "Your QR code is attached with the email",
-        attachments: [{ filename: "out.png", path: "./out.png" }],
+        html: '<img src="cid:outQR"/>',
+        attachments: [{ filename: "out.png", path: "./out.png", cid: "outQR" }],
       };
 
       let mailRes = await transporter.sendMail(mailOption);
