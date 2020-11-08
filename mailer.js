@@ -26,27 +26,32 @@ let transporter = mailer.createTransport({
 
 app.post("/withQRcode", async (req, res) => {
   try {
-    let QR = new QRcode({
-      text: req.body.id,
-      width: 200,
-      height: 200,
-    });
+    const API_KEY = req.body.API_KEY;
+    if (API_KEY === process.env.API_KEY) {
+      let QR = new QRcode({
+        text: req.body.id,
+        width: 200,
+        height: 200,
+      });
 
-    QR.saveImage({
-      path: "out.png",
-    });
+      QR.saveImage({
+        path: "out.png",
+      });
 
-    let mailOption = {
-      from: process.env.USER,
-      to: req.body.email,
-      subject: "Welcome!",
-      text: "Your QR code is attached with the email",
-      attachments: [{ filename: "out.png", path: "./out.png" }],
-    };
+      let mailOption = {
+        from: process.env.USER,
+        to: req.body.email,
+        subject: "Welcome!",
+        text: "Your QR code is attached with the email",
+        attachments: [{ filename: "out.png", path: "./out.png" }],
+      };
 
-    let mailRes = await transporter.sendMail(mailOption);
-    console.log(mailRes);
-    res.sendStatus(200);
+      let mailRes = await transporter.sendMail(mailOption);
+      console.log(mailRes);
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(401);
+    }
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
