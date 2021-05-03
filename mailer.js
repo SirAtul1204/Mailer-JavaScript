@@ -16,8 +16,12 @@ app.get("/", (req, res) => {
 let transporter = mailer.createTransport({
   service: "gmail",
   auth: {
+    type: "OAuth2",
     user: process.env.USER,
     pass: process.env.PASS,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    refreshToken: process.env.REFRESH_TOKEN,
   },
   tls: {
     rejectUnauthorized: false,
@@ -59,7 +63,7 @@ app.post("/withQRcode", async (req, res) => {
   }
 });
 
-let PORT = process.env.PORT || 5000;
+let PORT = process.env.PORT || 6969;
 app.listen(PORT, () => {
   console.log("Listening to Port", PORT);
 });
